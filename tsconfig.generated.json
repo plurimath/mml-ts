@@ -1,0 +1,29 @@
+{
+  "compilerOptions": {
+    "target": "ES2022",
+    "lib": [
+      "ES2022",
+      "DOM"
+    ],
+    "module": "NodeNext",
+    "moduleResolution": "NodeNext",
+    "rootDir": "src",
+    "outDir": "dist",
+    "strict": true,
+    "noUncheckedIndexedAccess": true,
+    "exactOptionalPropertyTypes": true,
+    "noImplicitOverride": true,
+    "verbatimModuleSyntax": true,
+    "isolatedModules": true,
+    "skipLibCheck": true,
+    "declaration": true,
+    "noCheck": true,
+    "incremental": true,
+    "tsBuildInfoFile": ".build/models.tsbuildinfo"
+  },
+  "include": [
+    "src/v3/**/*.ts",
+    "src/v4/**/*.ts",
+    "src/upstream/**/*.ts"
+  ]
+}

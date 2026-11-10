@@ -1,0 +1,61 @@
+{
+  "name": "@plurimath/mml-ts",
+  "version": "0.1.0-alpha.0",
+  "private": true,
+  "description": "Generated MathML 3 and 4 models and XML codecs backed by Moxml WASM",
+  "type": "module",
+  "license": "BSD-2-Clause",
+  "engines": {
+    "node": ">=22"
+  },
+  "files": [
+    "dist",
+    "model",
+    "README.md",
+    "NOTICE"
+  ],
+  "exports": {
+    ".": {
+      "types": "./dist/index.d.ts",
+      "import": "./dist/index.js"
+    },
+    "./v3": {
+      "types": "./dist/v3/index.d.ts",
+      "import": "./dist/v3/index.js"
+    },
+    "./v4": {
+      "types": "./dist/v4/index.d.ts",
+      "import": "./dist/v4/index.js"
+    },
+    "./artifacts": {
+      "types": "./dist/artifacts.d.ts",
+      "import": "./dist/artifacts.js"
+    }
+  },
+  "scripts": {
+    "build": "node scripts/build.mjs",
+    "prepare": "npm run build",
+    "test": "node --test test/runtime.test.mjs",
+    "check:artifacts": "node scripts/check-artifacts.mjs",
+    "generate": "node scripts/generate-models.mjs",
+    "check:package": "node scripts/check-package.mjs"
+  },
+  "dependencies": {
+    "moxml-ts": "git+https://github.com/lutaml/moxml-ts.git#a78091f7b11bb350fdd18a8dc6e12b3ae39661fd"
+  },
+  "devDependencies": {
+    "@types/node": "22.20.5",
+    "typescript": "6.0.3",
+    "yaml": "2.9.1"
+  },
+  "imports": {
+    "#mml-v3": {
+      "types": "./dist/v3/index.d.ts",
+      "default": "./dist/v3/index.js"
+    },
+    "#mml-v4": {
+      "types": "./dist/v4/index.d.ts",
+      "default": "./dist/v4/index.js"
+    }
+  }
+}
