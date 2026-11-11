@@ -16,8 +16,7 @@
     "dist",
     "model",
     "README.md",
-    "NOTICE",
-    "LICENSE.md"
+    "NOTICE"
   ],
   "exports": {
     ".": {
