@@ -1,4 +1,4 @@
-Local source candidate; no package publication is authorized.
+Source candidate; npm publication is not authorized.
 Model declarations originate in plurimath/mml (BSD-2-Clause).
 Generated model/XML codec runtime and contracts originate in lutaml/lutaml-ts (BSD-2-Clause), exact revision in model/codegen-provenance.json.
 XML processing uses the separately installed, pinned lutaml/moxml-ts dependency and its checksum-verified Leptris/Moxml WASM artifacts.

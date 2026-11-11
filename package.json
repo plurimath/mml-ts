@@ -5,6 +5,10 @@
   "description": "Generated MathML 3 and 4 models and XML codecs backed by Moxml WASM",
   "type": "module",
   "license": "BSD-2-Clause",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/plurimath/mml-ts.git"
+  },
   "engines": {
     "node": ">=22"
   },
@@ -12,7 +16,8 @@
     "dist",
     "model",
     "README.md",
-    "NOTICE"
+    "NOTICE",
+    "LICENSE.md"
   ],
   "exports": {
     ".": {

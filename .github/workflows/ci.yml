@@ -1,8 +1,11 @@
-name: Portable MathML runtime
+name: CI
 on:
-  pull_request:
   push:
-    branches: [migration/mml-portability-20261110]
+    branches: [main]
+  pull_request:
+concurrency:
+  group: ${{ github.workflow }}-${{ github.event.pull_request.number || github.ref }}
+  cancel-in-progress: true
 permissions:
   contents: read
 jobs:
@@ -10,21 +13,24 @@ jobs:
     strategy:
       fail-fast: false
       matrix:
-        os: [ubuntu-24.04, windows-latest, macos-latest]
+        os: [ubuntu-24.04, macos-latest, windows-latest]
         node: [22, 24]
     runs-on: ${{ matrix.os }}
+    timeout-minutes: 20
     steps:
       - uses: actions/checkout@v4
       - uses: actions/setup-node@v4
         with:
           node-version: ${{ matrix.node }}
           cache: npm
+      # Normal lifecycle install: the pinned moxml-ts git dependency builds in its prepare script.
       - run: npm ci
       - run: npm run check:artifacts
       - run: npm test
       - run: npm run check:package
   regenerate:
     runs-on: ubuntu-24.04
+    timeout-minutes: 20
     steps:
       - uses: actions/checkout@v4
       - uses: actions/checkout@v4
