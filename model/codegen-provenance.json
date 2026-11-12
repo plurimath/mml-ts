@@ -1,0 +1,88 @@
+{
+  "format": "mml-ts-codegen/1",
+  "generatorRepository": "lutaml/lutaml-ts",
+  "generatorCommit": "1242c7b6314dcadc42e3453e85c9f2fc879cd7ef",
+  "modelProducer": {
+    "format": "mml-portable-models/1",
+    "source_repository": "https://github.com/plurimath/mml",
+    "source_revision": "a88197810737e7eb809bbb5f887703a25beac3db",
+    "source_version": "2.4.7",
+    "framework_repository": "https://github.com/lutaml/lutaml-model",
+    "framework_revision": "fd2989fd8478b1ecb2508d98fa2d66792c09c72b",
+    "framework_status": "open candidate; not a released dependency",
+    "versions": {
+      "3": {
+        "path": "mathml-v3.bundle.json",
+        "sha256": "ee79ea4bcc910f91f1b118ae0accc5baeb058501c76f4d233e5c4724ef74aab4",
+        "bundle_checksum": "sha256:23bc156260b4dab3933351dadbae27a8f146c239875c630b2d76adcb27b778a4",
+        "models": 194,
+        "root": "Mml::V3::Math@mml_v3",
+        "capabilities": [
+          "xml"
+        ]
+      },
+      "4": {
+        "path": "mathml-v4.bundle.json",
+        "sha256": "7b1041645156d9df7b94a8c9c3acce6256b12d1df5f6cc611d39465e0556e26a",
+        "bundle_checksum": "sha256:5b823b450161072ff2adbdf4cf5b765909f4c85a7ea4e53dd17706a86165404c",
+        "models": 195,
+        "root": "Mml::V4::Math@mml_v4",
+        "capabilities": [
+          "xml"
+        ]
+      }
+    }
+  },
+  "moxmlCommit": "a78091f7b11bb350fdd18a8dc6e12b3ae39661fd",
+  "contractsSourceSha256": "a1a9d3628003eaea628b330870e18893815285d0bc55d9679ba62a853fc45f78",
+  "files": [
+    {
+      "path": "src/v3/index.ts",
+      "sha256": "0e9547057ec90b2c9a60887b279d0e0a952e150d6230f45223011c856e60ace2"
+    },
+    {
+      "path": "src/v3/models.ts",
+      "sha256": "09e5ff93a3a3e7c9c39c40a5d340c31ef934c82f4f53ae29a5bdd1c32113cdcf"
+    },
+    {
+      "path": "src/v3/runtime.ts",
+      "sha256": "b76420f175ea59f0e83d4d7cbd3790809a966d86d9daf6f9cdc5e262c4f489fd"
+    },
+    {
+      "path": "src/v3/xml/codecs.ts",
+      "sha256": "a6e7827afeef2c2429417459224b6b99333cc5a090055f0cc11484c70592cc55"
+    },
+    {
+      "path": "src/v3/xml/index.ts",
+      "sha256": "5b0ae531b38d8555c81c93f32a887018ef64e56570154723fd678cf80476dcfd"
+    },
+    {
+      "path": "src/v3/xml/runtime.ts",
+      "sha256": "5d13c9f4a7b2b23255349f111ea9231824495c66cb67d18ad0ebed08bb7e65fb"
+    },
+    {
+      "path": "src/v4/index.ts",
+      "sha256": "0e9547057ec90b2c9a60887b279d0e0a952e150d6230f45223011c856e60ace2"
+    },
+    {
+      "path": "src/v4/models.ts",
+      "sha256": "b80b8368b557819251cc4bae653fd632f88f460230d049f10d7cc48500ec2b53"
+    },
+    {
+      "path": "src/v4/runtime.ts",
+      "sha256": "b76420f175ea59f0e83d4d7cbd3790809a966d86d9daf6f9cdc5e262c4f489fd"
+    },
+    {
+      "path": "src/v4/xml/codecs.ts",
+      "sha256": "f5c4f47ce28c6bd4183eb443c996c451a59b610c468eab92f9faaf3118c0a5be"
+    },
+    {
+      "path": "src/v4/xml/index.ts",
+      "sha256": "5b0ae531b38d8555c81c93f32a887018ef64e56570154723fd678cf80476dcfd"
+    },
+    {
+      "path": "src/v4/xml/runtime.ts",
+      "sha256": "5d13c9f4a7b2b23255349f111ea9231824495c66cb67d18ad0ebed08bb7e65fb"
+    }
+  ]
+}
