@@ -1,7 +1,7 @@
 {
   "format": "mml-ts-codegen/1",
   "generatorRepository": "suleman-uzair/lutaml-ts",
-  "generatorCommit": "add5775cfa80aeb449fcd915cc6497600e5d84e4",
+  "generatorCommit": "a05320c47c08be72131066c90da041cf0c687a83",
   "modelProducer": {
     "format": "mml-portable-models/1",
     "source_repository": "https://github.com/plurimath/mml",
@@ -33,7 +33,7 @@
       }
     }
   },
-  "moxmlCommit": "a78091f7b11bb350fdd18a8dc6e12b3ae39661fd",
+  "moxmlCommit": "ea067e15a3ef66415555e13a745a5d913c4a4b76",
   "contractsSourceSha256": "cf2556171d30b77acc93897370af6b39e62b2f8a0f3b8eb198f9195a6c5965ad",
   "files": [
     {
@@ -58,7 +58,7 @@
     },
     {
       "path": "src/v3/xml/runtime.ts",
-      "sha256": "888891c487f45d93bf0d210b378e21f48ab60bc0eb3051ed7b6860da0fee29c6"
+      "sha256": "c7b4289df6fbfe519b1613dfcdd32ca52b8333358456be5e0e312e28fdef4890"
     },
     {
       "path": "src/v4/index.ts",
@@ -82,7 +82,7 @@
     },
     {
       "path": "src/v4/xml/runtime.ts",
-      "sha256": "888891c487f45d93bf0d210b378e21f48ab60bc0eb3051ed7b6860da0fee29c6"
+      "sha256": "c7b4289df6fbfe519b1613dfcdd32ca52b8333358456be5e0e312e28fdef4890"
     }
   ]
 }

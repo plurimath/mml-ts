@@ -75,8 +75,8 @@ jobs:
       - uses: actions/checkout@v4
       - uses: actions/checkout@v4
         with:
-          repository: suleman-uzair/lutaml-ts  # TEMPORARY fork pin (lutaml/lutaml-ts#3 head): pin to lutaml merge commit once lutaml-rs#10 / lutaml-ts#3 land.
-          ref: add5775cfa80aeb449fcd915cc6497600e5d84e4
+          repository: suleman-uzair/lutaml-ts  # TEMPORARY fork pin (suleman-uzair/lutaml-ts feat/xml-comment-pi-write: lutaml-ts#3 + comment/PI writing): pin to lutaml merge commit once lutaml-rs#10 / lutaml-ts#3 land.
+          ref: a05320c47c08be72131066c90da041cf0c687a83
           path: .build/lutaml-ts-source
           persist-credentials: false
       - uses: actions/setup-node@v4
