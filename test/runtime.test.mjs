@@ -21,7 +21,7 @@ test("public Math API and complete model graph artifacts",async()=>{
   const text='<math xmlns="http://www.w3.org/1998/Math/MathML"><mi>x</mi></math>';
   assert.equal(stable(stripWs(await canonicalTree(await (version===3?stringifyMath(await parseMath(text)):stringifyMath4(await parseMath4(text)))))) ,stable(stripWs(await canonicalTree(text))));
  }
- assert.equal((await provenance()).generatorCommit,"1242c7b6314dcadc42e3453e85c9f2fc879cd7ef");
+ assert.equal((await provenance()).generatorCommit,"add5775cfa80aeb449fcd915cc6497600e5d84e4");
  await assert.rejects(readBundle(2),RangeError);
 });
 test("artifact loader refuses corrupted installed graph bytes",async()=>{

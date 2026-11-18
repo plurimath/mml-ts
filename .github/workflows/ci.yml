@@ -75,8 +75,8 @@ jobs:
       - uses: actions/checkout@v4
       - uses: actions/checkout@v4
         with:
-          repository: lutaml/lutaml-ts
-          ref: 1242c7b6314dcadc42e3453e85c9f2fc879cd7ef
+          repository: suleman-uzair/lutaml-ts  # TEMPORARY fork pin (lutaml/lutaml-ts#3 head): pin to lutaml merge commit once lutaml-rs#10 / lutaml-ts#3 land.
+          ref: add5775cfa80aeb449fcd915cc6497600e5d84e4
           path: .build/lutaml-ts-source
           persist-credentials: false
       - uses: actions/setup-node@v4

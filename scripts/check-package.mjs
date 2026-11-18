@@ -18,7 +18,7 @@ import {readBundle,provenance} from "@plurimath/mml-ts/artifacts";
 const cases=JSON.parse(await readFile(new URL("./cases.json",import.meta.url),"utf8")).rows;
 for(const row of cases){const mod=row.version===3?v3:v4;const codec=mod.xml.CODECS["Mml::V"+row.version+"::"+row.model+"@mml_v"+row.version];const model=await codec.parse(row.input);const xml=await codec.stringify(model);assert.ok(xml.length);await codec.parse(xml);}
 for(const version of [3,4]){assert.equal(Object.keys(JSON.parse(await readBundle(version)).models).length,version===3?194:195);const text='<math xmlns="http://www.w3.org/1998/Math/MathML"><mi>x</mi></math>';assert.ok(await (version===3?stringifyMath(await parseMath(text)):stringifyMath4(await parseMath4(text))));}
-assert.equal((await provenance()).generatorCommit,"1242c7b6314dcadc42e3453e85c9f2fc879cd7ef");
+assert.equal((await provenance()).generatorCommit,"add5775cfa80aeb449fcd915cc6497600e5d84e4");
 console.log(JSON.stringify({cases:cases.length,node:process.version,package:"@plurimath/mml-ts"}));
 `);
 await writeFile(join(consumer,"types.ts"),`import {parseMath,stringifyMath,parseMath4,stringifyMath4} from "@plurimath/mml-ts";\nimport type {MathML3,MathML4} from "@plurimath/mml-ts";\nconst third:MathML3=await parseMath("<math/>");await stringifyMath(third);\nconst fourth:MathML4=await parseMath4("<math/>");await stringifyMath4(fourth);\n`);

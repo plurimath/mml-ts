@@ -23,6 +23,15 @@ const escapeAttr = (text: string): string => text.replace(/[&<>"\n\r\t]/g, (c) =
 
 type Scope = ReadonlyMap<string, string>;
 
+// Mixed content: at least one child element and some non-whitespace text.
+function isMixed(node: Node): boolean {
+  const children = node.children();
+  return (
+    children.some((child) => child.kind() === ELEMENT) &&
+    children.some((child) => child.kind() === TEXT && (child.text() ?? "").trim() !== "")
+  );
+}
+
 function write(node: Node, depth: number, scope: Scope, out: string[]): void {
   const uri = node.namespaceUri() ?? "";
   const local = node.localName() ?? "";
@@ -51,22 +60,33 @@ function write(node: Node, depth: number, scope: Scope, out: string[]): void {
   }
   out.push(">");
   const indent = children.every((child) => child.kind() !== TEXT && child.kind() !== CDATA);
-  for (const child of children) {
+  // Ruby writes a bare newline after a mixed-content child of a mixed-content
+  // element (</mrow>\n</mrow>, </mrow>\n<mo>): a whitespace-only text right
+  // after such a child becomes that newline; with no text there, one is added.
+  const mixed = isMixed(node);
+  children.forEach((child, at) => {
     if (indent) out.push("\n" + "  ".repeat(depth + 1));
+    const prev = at > 0 ? children[at - 1] : undefined;
+    const afterMixed = mixed && prev !== undefined && prev.kind() === ELEMENT && isMixed(prev);
     switch (child.kind()) {
       case ELEMENT:
+        if (afterMixed) out.push("\n");
         write(child, depth + 1, inner, out);
         break;
-      case TEXT:
-        out.push(escapeText(child.text() ?? ""));
+      case TEXT: {
+        const text = child.text() ?? "";
+        out.push(afterMixed && text.trim() === "" ? "\n" : escapeText(text));
         break;
+      }
       case CDATA:
         out.push(`<![CDATA[${(child.text() ?? "").replaceAll("]]>", "]]]]><![CDATA[>")}]]>`);
         break;
       default:
         throw new Error(`unexpected node kind ${child.kind()} in written MathML`);
     }
-  }
+  });
+  const last = children[children.length - 1];
+  if (mixed && last !== undefined && last.kind() === ELEMENT && isMixed(last)) out.push("\n");
   if (indent) out.push("\n" + "  ".repeat(depth));
   out.push(`</${name}>`);
 }
