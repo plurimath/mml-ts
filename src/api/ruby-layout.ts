@@ -10,7 +10,9 @@ const MATHML = "http://www.w3.org/1998/Math/MathML";
 const XML_NS = "http://www.w3.org/XML/1998/namespace";
 const ELEMENT = 1;
 const TEXT = 2;
+const COMMENT = 3;
 const CDATA = 4;
+const PI = 5;
 
 // Elements whose models map text content (map_content): Ruby writes them as a
 // start and end tag even when the content is empty.
@@ -81,6 +83,14 @@ function write(node: Node, depth: number, scope: Scope, out: string[]): void {
       case CDATA:
         out.push(`<![CDATA[${(child.text() ?? "").replaceAll("]]>", "]]]]><![CDATA[>")}]]>`);
         break;
+      case COMMENT:
+        out.push(`<!--${child.text() ?? ""}-->`);
+        break;
+      case PI: {
+        const data = child.text() ?? "";
+        out.push(`<?${child.piTarget() ?? ""}${data === "" ? "" : ` ${data}`}?>`);
+        break;
+      }
       default:
         throw new Error(`unexpected node kind ${child.kind()} in written MathML`);
     }
