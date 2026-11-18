@@ -14,10 +14,23 @@
 // Lutaml attributes the generated models do not expose. The ledger is
 // append-only: a row whose id has an -r2 sibling is superseded by it and only
 // the sibling runs, as in the Ruby gem's replay. Any failing row fails.
+//
+// KNOWN_REFUSALS lists rows whose input is not well-formed XML. Ruby's parser
+// recovers from them; this package's parser is strict (W3C) by design, so those
+// rows must be refused here, and a listed row that is accepted fails the replay
+// so the list cannot go stale.
 import { readFileSync, writeFileSync } from "node:fs";
 import { isDeepStrictEqual, parseArgs } from "node:util";
 import { parse as parseXml } from "moxml-ts";
 import { parseMath, stringifyMath } from "../dist/index.js";
+
+// Rows refused on purpose: the input is malformed XML.
+const KNOWN_REFUSALS = new Map([
+  ["mathml-unclosed-math.model-roundtrip", "unclosed <math> element"],
+  ["mathml-unclosed-token.model-roundtrip", "unclosed <mi> element"],
+  ["mathml-unclosed-operator.model-roundtrip", "unclosed <mo> element"],
+  ["mathml-mismatched-close.model-roundtrip", "</mn> closes <mi>"],
+]);
 
 const { values: args, positionals } = parseArgs({
   allowPositionals: true,
@@ -71,6 +84,7 @@ async function failure(row) {
   } catch (e) {
     error = e;
   }
+  if (KNOWN_REFUSALS.has(row.id)) return error ? null : ["known-refusal-accepted", actual];
   if (row.expected.refusal) return error ? null : ["accepted", actual];
   if (error) return ["refused", String(error?.message ?? error)];
   const expected = row.expected.output.str;
@@ -83,6 +97,7 @@ async function failure(row) {
 }
 
 const ids = new Set(corpus.cases.map((row) => row.id));
+for (const id of KNOWN_REFUSALS.keys()) if (!ids.has(id)) throw new Error(`${id}: listed known refusal is not in the corpus`);
 const superseded = new Set([...ids].filter((id) => id.includes("-r2")).map((id) => id.replace("-r2", "")));
 const outcomes = [];
 const kinds = {};
@@ -102,6 +117,7 @@ const report = {
   executed: outcomes.length,
   superseded: superseded.size,
   failed: failed.length,
+  known_refusals: [...KNOWN_REFUSALS].map(([id, reason]) => ({ id, reason })),
   kinds,
   outcomes,
 };
