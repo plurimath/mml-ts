@@ -8,6 +8,9 @@ concurrency:
   cancel-in-progress: true
 permissions:
   contents: read
+# The moxml-ts git dependency runs `gh api` in its prepare script (npm ci), which needs a token in Actions.
+env:
+  GH_TOKEN: ${{ github.token }}
 jobs:
   runtime:
     strategy:

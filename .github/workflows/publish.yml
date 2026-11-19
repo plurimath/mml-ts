@@ -23,6 +23,9 @@ concurrency:
   group: npm-publish
   cancel-in-progress: false
 
+# The moxml-ts git dependency runs `gh api` in its prepare script (npm ci), which needs a token in Actions.
+env:
+  GH_TOKEN: ${{ github.token }}
 jobs:
   publish:
     if: github.ref == 'refs/heads/main' || startsWith(github.ref, 'refs/tags/v')
