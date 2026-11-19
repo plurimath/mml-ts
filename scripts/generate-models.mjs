@@ -4,7 +4,8 @@ import {fileURLToPath,pathToFileURL} from "node:url";
 import {execFileSync} from "node:child_process";
 import {createHash} from "node:crypto";
 import ts from "typescript";
-const pin="1242c7b6314dcadc42e3453e85c9f2fc879cd7ef";
+// TEMPORARY fork pin (suleman-uzair/lutaml-ts feat/xml-comment-pi-write: lutaml-ts#3 + comment/PI writing): pin to lutaml merge commit once lutaml-rs#10 / lutaml-ts#3 land.
+const pin="a05320c47c08be72131066c90da041cf0c687a83";
 const source=resolve(process.argv[2]??"");
 if(!process.argv[2])throw new Error("supply the exact pinned upstream lutaml-ts source checkout");
 if(execFileSync("git",["rev-parse","HEAD"],{cwd:source,encoding:"utf8"}).trim()!==pin)throw new Error("generator revision mismatch");
@@ -24,5 +25,5 @@ for(const version of [3,4]){
  for(const [path,text] of files){const filename=join(root,`src/v${version}`,path);await mkdir(dirname(filename),{recursive:true});await writeFile(filename,text);filesWritten.push({path:`src/v${version}/${path}`,sha256:createHash("sha256").update(text).digest("hex")});}
 }
 const producer=JSON.parse(await readFile(join(root,"model/manifest.json"),"utf8"));
-await writeFile(join(root,"model/codegen-provenance.json"),JSON.stringify({format:"mml-ts-codegen/1",generatorRepository:"lutaml/lutaml-ts",generatorCommit:pin,modelProducer:producer,moxmlCommit:"a78091f7b11bb350fdd18a8dc6e12b3ae39661fd",contractsSourceSha256:createHash("sha256").update(await readFile(join(source,"src/contracts.ts"))).digest("hex"),files:filesWritten},null,2)+"\n");
+await writeFile(join(root,"model/codegen-provenance.json"),JSON.stringify({format:"mml-ts-codegen/1",generatorRepository:"suleman-uzair/lutaml-ts",generatorCommit:pin,modelProducer:producer,moxmlCommit:"216d56f93b733e6408772b607dbb4c5bbd489080",contractsSourceSha256:createHash("sha256").update(await readFile(join(source,"src/contracts.ts"))).digest("hex"),files:filesWritten},null,2)+"\n");
 console.log(`Generated complete MathML 3/4 XML model graphs (${filesWritten.length} files)`);

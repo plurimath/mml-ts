@@ -8,6 +8,9 @@ concurrency:
   cancel-in-progress: true
 permissions:
   contents: read
+# The moxml-ts git dependency runs `gh api` in its prepare script (npm ci), which needs a token in Actions.
+env:
+  GH_TOKEN: ${{ github.token }}
 jobs:
   runtime:
     strategy:
@@ -28,6 +31,46 @@ jobs:
       - run: npm run check:artifacts
       - run: npm test
       - run: npm run check:package
+  # Replays the pinned plurimath-testsuite mathml generation 3: the same
+  # commit and generation the Ruby gem's corpus workflow replays.
+  corpus:
+    strategy:
+      fail-fast: false
+      matrix:
+        os: [ubuntu-24.04, macos-latest, windows-latest]
+    runs-on: ${{ matrix.os }}
+    timeout-minutes: 20
+    defaults:
+      run:
+        shell: bash
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/checkout@v4
+        with:
+          repository: plurimath/plurimath-testsuite
+          ref: 674126a07fa1cf89c24bc50fadb305299e1d1b18
+          path: .corpus
+          persist-credentials: false
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+      - name: Verify and extract the pinned generation
+        run: |
+          python -m pip install PyYAML==6.0.2
+          python scripts/extract-corpus.py .corpus scripts/corpus-pin.json "$RUNNER_TEMP/corpus.json"
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 24
+          cache: npm
+      - run: npm ci
+      - name: Replay pinned generation 3 (model-roundtrip rows)
+        run: node scripts/replay-corpus.mjs "$RUNNER_TEMP/corpus.json" --report "$RUNNER_TEMP/corpus-report.json"
+      - uses: actions/upload-artifact@v4
+        if: ${{ !cancelled() }}
+        with:
+          name: corpus-report-${{ matrix.os }}
+          path: ${{ runner.temp }}/corpus-report.json
+          if-no-files-found: ignore
   regenerate:
     runs-on: ubuntu-24.04
     timeout-minutes: 20
@@ -35,8 +78,8 @@ jobs:
       - uses: actions/checkout@v4
       - uses: actions/checkout@v4
         with:
-          repository: lutaml/lutaml-ts
-          ref: 1242c7b6314dcadc42e3453e85c9f2fc879cd7ef
+          repository: suleman-uzair/lutaml-ts  # TEMPORARY fork pin (suleman-uzair/lutaml-ts feat/xml-comment-pi-write: lutaml-ts#3 + comment/PI writing): pin to lutaml merge commit once lutaml-rs#10 / lutaml-ts#3 land.
+          ref: a05320c47c08be72131066c90da041cf0c687a83
           path: .build/lutaml-ts-source
           persist-credentials: false
       - uses: actions/setup-node@v4
