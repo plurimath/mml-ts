@@ -25,5 +25,5 @@ for(const version of [3,4]){
  for(const [path,text] of files){const filename=join(root,`src/v${version}`,path);await mkdir(dirname(filename),{recursive:true});await writeFile(filename,text);filesWritten.push({path:`src/v${version}/${path}`,sha256:createHash("sha256").update(text).digest("hex")});}
 }
 const producer=JSON.parse(await readFile(join(root,"model/manifest.json"),"utf8"));
-await writeFile(join(root,"model/codegen-provenance.json"),JSON.stringify({format:"mml-ts-codegen/1",generatorRepository:"suleman-uzair/lutaml-ts",generatorCommit:pin,modelProducer:producer,moxmlCommit:"ea067e15a3ef66415555e13a745a5d913c4a4b76",contractsSourceSha256:createHash("sha256").update(await readFile(join(source,"src/contracts.ts"))).digest("hex"),files:filesWritten},null,2)+"\n");
+await writeFile(join(root,"model/codegen-provenance.json"),JSON.stringify({format:"mml-ts-codegen/1",generatorRepository:"suleman-uzair/lutaml-ts",generatorCommit:pin,modelProducer:producer,moxmlCommit:"216d56f93b733e6408772b607dbb4c5bbd489080",contractsSourceSha256:createHash("sha256").update(await readFile(join(source,"src/contracts.ts"))).digest("hex"),files:filesWritten},null,2)+"\n");
 console.log(`Generated complete MathML 3/4 XML model graphs (${filesWritten.length} files)`);
