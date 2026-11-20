@@ -14,3 +14,10 @@ const identifier = await v3.xml.codecMmlV3Mi_mml_v3.parse('<mi xmlns="http://www
 The Node-only `@plurimath/mml-ts/artifacts` entry exports `readBundle(version)` with checksum validation and `provenance()`. MathML 2, generic Ruby object API parity and OMML are outside this candidate.
 
 Run `npm ci`, `npm run check:artifacts`, `npm run build`, and `npm test`. Regenerate with `npm run generate -- /path/to/exact/lutaml-ts/source`; the revision must match the pinned producer. This package is maintained in `plurimath/mml-ts`. It remains private in the package manifest; registry publication is separate from this source delivery.
+
+The CI corpus replay pins MathML generation 3 and checks both the parsed
+MathML 3 model and Ruby's XML bytes. Model comparisons preserve attribute
+values, absent versus null fields, text and child order; the report counts
+representation normalizations described in `scripts/model-wire.mjs`.
+`node --test test/model-wire.test.mjs` runs the focused model-wire checks
+against the generated model classes after the normal package build.

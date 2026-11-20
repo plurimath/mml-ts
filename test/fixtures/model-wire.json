@@ -1,0 +1,27 @@
+{
+  "repository": "https://github.com/plurimath/plurimath-testsuite",
+  "revision": "674126a07fa1cf89c24bc50fadb305299e1d1b18",
+  "generation": 3,
+  "sources": [
+    {
+      "path": "stages/mathml/generations/000003/payloads/model-roundtrip-tokens.yaml",
+      "sha256": "6a2a6fee16103c73a90ed31fed41b7bdf0838b7d669db1c657d54cd22d828a00",
+      "ids": [
+        "mathml-tokens-088.model-roundtrip"
+      ]
+    },
+    {
+      "path": "stages/mathml/generations/000003/payloads/model-roundtrip-text.yaml",
+      "sha256": "b2b13a33285e2381764d63100e4a786eb7b7f10fa680b7a7d34facceb08f4f58",
+      "ids": [
+        "mathml-text-001.model-roundtrip",
+        "mathml-text-009.model-roundtrip"
+      ]
+    }
+  ],
+  "cases": [
+    {"id":"mathml-tokens-088.model-roundtrip","input":{"str":"<math>\n  <mo>''</mo>\n</math>\n"},"options":{},"expected":{"model":{"node":"Mml::V3::Math","fields":[["mo_value",{"array":[{"node":"Mml::V3::Mo","fields":[["value",{"array":[{"str":"''"}]}],["@element_order",{"array":[{"hash":[[{"str":"type"},{"str":"Text"}],[{"str":"name"},{"str":"text"}],[{"str":"text"},{"str":"''"}]]}]}]]}]}],["@element_order",{"array":[{"hash":[[{"str":"type"},{"str":"Text"}],[{"str":"name"},{"str":"text"}],[{"str":"text"},{"str":"\n  "}]]},{"hash":[[{"str":"type"},{"str":"Element"}],[{"str":"name"},{"str":"mo"}]]},{"hash":[[{"str":"type"},{"str":"Text"}],[{"str":"name"},{"str":"text"}],[{"str":"text"},{"str":"\n"}]]}]}]]},"output":{"str":"<math xmlns=\"http://www.w3.org/1998/Math/MathML\">\n  <mo>''</mo>\n</math>"}}},
+    {"id":"mathml-text-001.model-roundtrip","input":{"str":"<math xmlns='http://www.w3.org/1998/Math/MathML'><mtext>a&#x3b2;b</mtext></math>"},"options":{},"expected":{"model":{"node":"Mml::V3::Math","fields":[["mtext_value",{"array":[{"node":"Mml::V3::Mtext","fields":[["value",{"array":[{"str":"aβb"}]}],["@element_order",{"array":[{"hash":[[{"str":"type"},{"str":"Text"}],[{"str":"name"},{"str":"text"}],[{"str":"text"},{"str":"aβb"}]]}]}]]}]}],["@element_order",{"array":[{"hash":[[{"str":"type"},{"str":"Element"}],[{"str":"name"},{"str":"mtext"}]]}]}]]},"output":{"str":"<math xmlns=\"http://www.w3.org/1998/Math/MathML\">\n  <mtext>aβb</mtext>\n</math>"}}},
+    {"id":"mathml-text-009.model-roundtrip","input":{"str":"<math>\n  <mtext>&#xA0;<!--NO-BREAK SPACE-->Theorem &#xA0;<!--NO-BREAK SPACE-->1:</mtext>\n</math>\n"},"options":{},"expected":{"model":{"node":"Mml::V3::Math","fields":[["mtext_value",{"array":[{"node":"Mml::V3::Mtext","fields":[["value",{"array":[{"str":" "},{"str":"Theorem  "},{"str":"1:"}]}],["@element_order",{"array":[{"hash":[[{"str":"type"},{"str":"Text"}],[{"str":"name"},{"str":"text"}],[{"str":"text"},{"str":" "}]]},{"hash":[[{"str":"type"},{"str":"Comment"}],[{"str":"name"},{"str":"comment"}]]},{"hash":[[{"str":"type"},{"str":"Text"}],[{"str":"name"},{"str":"text"}],[{"str":"text"},{"str":"Theorem  "}]]},{"hash":[[{"str":"type"},{"str":"Comment"}],[{"str":"name"},{"str":"comment"}]]},{"hash":[[{"str":"type"},{"str":"Text"}],[{"str":"name"},{"str":"text"}],[{"str":"text"},{"str":"1:"}]]}]}]]}]}],["@element_order",{"array":[{"hash":[[{"str":"type"},{"str":"Text"}],[{"str":"name"},{"str":"text"}],[{"str":"text"},{"str":"\n  "}]]},{"hash":[[{"str":"type"},{"str":"Element"}],[{"str":"name"},{"str":"mtext"}]]},{"hash":[[{"str":"type"},{"str":"Text"}],[{"str":"name"},{"str":"text"}],[{"str":"text"},{"str":"\n"}]]}]}]]},"output":{"str":"<math xmlns=\"http://www.w3.org/1998/Math/MathML\">\n  <mtext> <!--NO-BREAK SPACE-->Theorem  <!--NO-BREAK SPACE-->1:</mtext>\n</math>"}}}
+  ]
+}

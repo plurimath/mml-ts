@@ -10,8 +10,8 @@
 // Mml.parse builds by default), and the written XML must equal the row's expected to_xml output
 // byte for byte; a row the gem refuses must be refused. A failing output is
 // classed as output-bytes (same element tree, different bytes) or output-tree.
-// The expected Ruby model wire is not compared: it names Ruby classes and
-// Lutaml attributes the generated models do not expose. The ledger is
+// The parsed model must also match the pinned Ruby tagged model wire
+// (scripts/model-wire.mjs); model differences fail independently of XML bytes. The ledger is
 // append-only: a row whose id has an -r2 sibling is superseded by it and only
 // the sibling runs, as in the Ruby gem's replay. Any failing row fails.
 //
@@ -23,6 +23,7 @@ import { readFileSync, writeFileSync } from "node:fs";
 import { isDeepStrictEqual, parseArgs } from "node:util";
 import { parse as parseXml } from "moxml-ts";
 import { parseMath, stringifyMath } from "../dist/index.js";
+import { firstDifference, normalizeExpected, profileCounts, wire } from "./model-wire.mjs";
 
 // Rows refused on purpose: the input is malformed XML.
 const KNOWN_REFUSALS = new Map([
@@ -74,13 +75,16 @@ async function xmlTree(xml) {
 }
 
 // What Mml.parse(input).to_xml does with the default MathML 3 models.
-const roundtrip = async (input) => stringifyMath(await parseMath(input));
+const roundtrip = async (input) => {
+  const model = await parseMath(input);
+  return [await stringifyMath(model), model];
+};
 
 async function failure(row) {
   if (row.options && Object.keys(row.options).length > 0) throw new Error(`${row.id}: unsupported options`);
-  let actual, error;
+  let actual, model, error;
   try {
-    actual = await roundtrip(row.input.str);
+    [actual, model] = await roundtrip(row.input.str);
   } catch (e) {
     error = e;
   }
@@ -88,7 +92,14 @@ async function failure(row) {
   if (row.expected.refusal) return error ? null : ["accepted", actual];
   if (error) return ["refused", String(error?.message ?? error)];
   const expected = row.expected.output.str;
-  if (actual === expected) return null;
+  let modelFailure;
+  try {
+    const { normalized } = normalizeExpected(row.expected.model);
+    modelFailure = firstDifference(wire(model), normalized);
+  } catch (error) {
+    modelFailure = String(error?.message ?? error);
+  }
+  if (actual === expected) return modelFailure === null ? null : ["model-wire", modelFailure];
   let at = 0;
   while (actual[at] === expected[at]) at++;
   const left = await xmlTree(actual);
@@ -117,11 +128,13 @@ const report = {
   executed: outcomes.length,
   superseded: superseded.size,
   failed: failed.length,
+  model_wire_profiles: profileCounts(),
   known_refusals: [...KNOWN_REFUSALS].map(([id, reason]) => ({ id, reason })),
   kinds,
   outcomes,
 };
 if (args.report) writeFileSync(args.report, JSON.stringify(report, null, 2));
 console.log(`${outcomes.length} rows executed, ${superseded.size} superseded, ${failed.length} failed ${JSON.stringify(kinds)}`);
+console.log(`model wire normalizations (rows): ${JSON.stringify(profileCounts())}`);
 for (const o of failed.slice(0, 20)) console.log(`${o.id} [${o.kind}] ${o.failure}`);
 if (failed.length > 0) process.exitCode = 1;
