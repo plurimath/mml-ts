@@ -8,6 +8,9 @@
 // ordered models. The generated reader/writer does not retain those tokens
 // (src/v3/xml/runtime.ts). Models with map_content are mixed, so their spaces
 // remain significant. Empty US-ASCII strings have the same value as UTF-8 "".
+// The generated reader represents an empty map_content element with a single
+// synthetic text token. Ruby keeps value: [""] but has no element_order entry
+// for that element, so wire() omits only this synthetic order token.
 // The separate replay byte comparison still checks all serialized content.
 import { readFileSync } from "node:fs";
 import { isDeepStrictEqual } from "node:util";
@@ -85,6 +88,8 @@ export function wire(model) {
         order.push(orderEntry([["type", "Element"], ["name", name]]));
       } else if (token.kind === "text") {
         const text = "literal" in token ? token.literal : [model[token.attribute]].flat()[token.index];
+        if (text === "" && token.attribute === meta.content &&
+            tokens.every((other) => other === token || other.kind === "attribute")) continue;
         order.push(orderEntry([["type", "Text"], ["name", "text"], ["text", text]]));
       } else if (token.kind === "comment") {
         order.push(orderEntry([["type", "Comment"], ["name", "comment"]]));

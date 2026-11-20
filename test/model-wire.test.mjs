@@ -53,6 +53,27 @@ test("missing, explicit null and empty string stay different", () => {
   assert.notEqual(firstDifference({ fields: [] }, { fields: [["value", { nil: true }]] }), null);
 });
 
+for (const Model of [Mi, Mo, Mtext]) {
+  test(`${Model.name}: empty mapped content has a value but no synthetic order entry`, () => {
+    const empty = wire(new Model({ value: [""], __lml_content: [text(0)] }));
+    assert.deepEqual(empty.fields, [["value", { array: [{ str: "" }] }]]);
+    assert.notEqual(firstDifference(empty, wire(new Model())), null);
+    const whitespace = wire(new Model({ value: [" "], __lml_content: [text(0)] }));
+    assert.deepEqual(whitespace.fields.at(-1), ["@element_order", { array: [
+      order([["type", "Text"], ["name", "text"], ["text", " "]]),
+    ] }]);
+  });
+}
+
+test("empty literal text and text beside a comment remain ordered", () => {
+  const literal = wire(new Mi({ __lml_content: [{ kind: "text", literal: "" }] }));
+  assert.equal(literal.fields.at(-1)[0], "@element_order");
+  const commented = wire(new Mi({ value: [""], __lml_content: [
+    text(0), { kind: "comment", literal: "keep" },
+  ] }));
+  assert.equal(commented.fields.at(-1)[1].array.length, 2);
+});
+
 test("mixed whitespace is retained; only element-only formatting is normalized", () => {
   const mixed = { node: "Mml::V3::Mi", fields: [["value", { array: [{ str: " " }] }],
     ["@element_order", { array: [order([["type", "Text"], ["name", "text"], ["text", " "]])] }]] };

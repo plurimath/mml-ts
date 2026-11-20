@@ -37,8 +37,9 @@ test("artifact loader refuses corrupted installed graph bytes",async()=>{
 // These pinned Ruby examples exercise the actual XML reader as well as the
 // wire checker; the full generation is replayed by the separate corpus job.
 const modelWireFixture = JSON.parse(await readFile(new URL("./fixtures/model-wire.json", import.meta.url), "utf8"));
+const emptyModelWireFixture = JSON.parse(await readFile(new URL("./fixtures/model-wire-empty.json", import.meta.url), "utf8"));
 const { wire, normalizeExpected } = await import("../scripts/model-wire.mjs");
-for (const row of modelWireFixture.cases) test(`Ruby model + XML bytes: ${row.id}`, async () => {
+for (const row of [...modelWireFixture.cases, ...emptyModelWireFixture.cases]) test(`Ruby model + XML bytes: ${row.id}`, async () => {
  const model = await parseMath(row.input.str);
  assert.deepEqual(wire(model), normalizeExpected(row.expected.model).normalized);
  assert.equal(await stringifyMath(model), row.expected.output.str);
